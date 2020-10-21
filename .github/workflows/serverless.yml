@@ -23,7 +23,7 @@ jobs:
             - run: yarn install --frozen-lockfile
 
             - name: serverless deploy
-              uses: serverless/github-action@master
+              uses: serverless/github-action@v2.1.0
               with:
                   args: deploy
               env:
