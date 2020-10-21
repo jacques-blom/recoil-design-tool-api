@@ -1,0 +1,20 @@
+{
+    "compilerOptions": {
+        "baseUrl": ".",
+        "preserveConstEnums": true,
+        "strict": true,
+        "sourceMap": true,
+        "allowJs": true,
+        "target": "es2019",
+        "module": "commonjs",
+        "moduleResolution": "node",
+        "lib": ["ES2019", "DOM"],
+        "rootDir": "./",
+        "outDir": ".build",
+        "strictPropertyInitialization": false,
+        "emitDecoratorMetadata": true,
+        "experimentalDecorators": true,
+        "allowSyntheticDefaultImports": true
+    },
+    "include": ["./handlers"]
+}
