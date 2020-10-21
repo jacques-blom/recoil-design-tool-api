@@ -10,7 +10,6 @@ plugins:
 provider:
     name: aws
     runtime: nodejs12.x
-    profile: personal
 
     environment:
         DYNAMODB_TABLE_IMAGES: ${self:service}-images-${self:provider.stage}
