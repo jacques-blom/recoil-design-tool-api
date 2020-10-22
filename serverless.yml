@@ -13,6 +13,7 @@ provider:
 
     environment:
         DYNAMODB_TABLE_IMAGES: ${self:service}-images-${self:provider.stage}
+        DYNAMODB_TABLE_STATE: ${self:service}-state-${self:provider.stage}
 
     iamRoleStatements:
         - Effect: Allow
@@ -20,7 +21,9 @@ provider:
               - dynamodb:GetItem
               - dynamodb:UpdateItem
               - dynamodb:PutItem
-          Resource: 'arn:aws:dynamodb:${opt:region, self:provider.region}:*:table/${self:provider.environment.DYNAMODB_TABLE_IMAGES}'
+          Resource:
+              - {'Fn::GetAtt': ['DynamoDBImages', 'Arn']}
+              - {'Fn::GetAtt': ['DynamoDBState', 'Arn']}
 
 functions:
     image-details:
@@ -39,10 +42,18 @@ functions:
                   method: get
         environment:
             DYNAMODB_TABLE_IMAGES: ${self:provider.environment.DYNAMODB_TABLE_IMAGES}
+    store-state:
+        handler: handlers/store-state.handler
+        events:
+            - http:
+                  path: store-state
+                  method: post
+        environment:
+            DYNAMODB_TABLE_STATE: ${self:provider.environment.DYNAMODB_TABLE_STATE}
 
 resources:
     Resources:
-        NicknamesTable:
+        DynamoDBImages:
             Type: 'AWS::DynamoDB::Table'
             Properties:
                 AttributeDefinitions:
@@ -55,3 +66,16 @@ resources:
                     ReadCapacityUnits: 1
                     WriteCapacityUnits: 1
                 TableName: ${self:provider.environment.DYNAMODB_TABLE_IMAGES}
+        DynamoDBState:
+            Type: 'AWS::DynamoDB::Table'
+            Properties:
+                AttributeDefinitions:
+                    - AttributeName: id
+                      AttributeType: S
+                KeySchema:
+                    - AttributeName: id
+                      KeyType: HASH
+                ProvisionedThroughput:
+                    ReadCapacityUnits: 1
+                    WriteCapacityUnits: 1
+                TableName: ${self:provider.environment.DYNAMODB_TABLE_STATE}
