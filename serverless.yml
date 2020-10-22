@@ -12,8 +12,8 @@ provider:
     runtime: nodejs12.x
 
     environment:
-        DYNAMODB_TABLE_IMAGES: ${self:service}-images
-        DYNAMODB_TABLE_STATE: ${self:service}-state
+        DYNAMODB_TABLE_IMAGES: ${self:service}-images-${self:provider.stage}
+        DYNAMODB_TABLE_STATE: ${self:service}-state-${self:provider.stage}
 
     iamRoleStatements:
         - Effect: Allow
