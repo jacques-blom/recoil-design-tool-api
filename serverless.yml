@@ -50,6 +50,14 @@ functions:
                   method: post
         environment:
             DYNAMODB_TABLE_STATE: ${self:provider.environment.DYNAMODB_TABLE_STATE}
+    get-state:
+        handler: handlers/get-state.handler
+        events:
+            - http:
+                  path: get-state
+                  method: get
+        environment:
+            DYNAMODB_TABLE_STATE: ${self:provider.environment.DYNAMODB_TABLE_STATE}
 
 resources:
     Resources:
